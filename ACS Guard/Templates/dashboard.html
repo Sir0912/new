@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <h1>👥 Employee Portal</h1>
+            <a href="/logout" class="btn-logout">Logout</a>
+        </nav>
+        
+        <div class="content">
+            <div class="welcome-card">
+                <h2>Welcome, {{ name }}!</h2>
+                <p><strong>Email:</strong> {{ email }}</p>
+                <p><strong>Your IP:</strong> {{ ip }}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

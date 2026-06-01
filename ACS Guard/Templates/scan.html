@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scanner</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        #status { font-size: 24px; color: gray; }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1>RFID Security Scanner</h1>
+    <p id="status">Connecting to scanner...</p>
+    
+    <script>
+        // 1. Connect to the server's live radio line
+        const socket = io();
+
+        socket.on('connect', () => {
+            $("#status").text("Ready to scan...").css("color", "gray");
+        });
+
+        // 2. Wait patiently for the 'card_scanned' announcement
+        socket.on('card_scanned', function(data) {
+            if (data.authorized) {
+                // If the user matches our database
+                $("#status").text("Access Granted: " + data.name).attr("class", "success");
+                
+                // Wait 1.5 seconds so the user can read the success message, then redirect
+                setTimeout(() => {
+                    window.location.href = "/cyber_dash";
+                }, 1500);
+            } else {
+                // If it's a random card
+                $("#status").text("Access Denied: Unknown RFID").attr("class", "error");
+                
+                // Reset back to normal after 3 seconds
+                setTimeout(() => {
+                    $("#status").text("Ready to scan...").attr("class", "");
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
